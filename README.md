@@ -5,7 +5,7 @@ This software is still under it's prerelease. Please report any missing/broken f
 {% endhint %}
 
 {% hint style="info" %}
-**Disclamers:**
+**Disclaimer:**
 - This manual contains AI generated content and may not be 100% accurate.
 {% endhint %}
 
