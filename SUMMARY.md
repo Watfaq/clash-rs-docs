@@ -2,11 +2,6 @@
 
 * [👋 Welcome to ClashRS User Manual](README.md)
 
-{% hint style="info" %}
-**Disclamers:**
-- This manual contains AI generated content and may not be 100% accurate.
-{% endhint %}
-
 ## Using It
 
 * [⌨️ Getting set up](using-it/getting-set-up.md)

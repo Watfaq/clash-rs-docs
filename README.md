@@ -4,6 +4,12 @@
 This software is still under it's prerelease. Please report any missing/broken features if you'd like to :thumbsup:
 {% endhint %}
 
+{% hint style="info" %}
+**Disclamers:**
+- This manual contains AI generated content and may not be 100% accurate.
+{% endhint %}
+
+
 ## Overview
 
 ClashRS is a network proxy software that you can use to control how you want to divert your internet traffic through different proxy servers with flexible rules and multiple different supported outbound protocols.
