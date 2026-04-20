@@ -6,11 +6,15 @@ This document covers all supported outbound proxy protocols in ClashRS, includin
 
 ClashRS supports multiple outbound proxy protocols for different use cases:
 
+- **AnyTLS**: TLS-multiplexed proxy protocol
 - **Shadowsocks**: Lightweight SOCKS5 proxy with encryption
+- **ShadowQuic**: QUIC-based Shadowsocks with JLS obfuscation
 - **VMess**: V2Ray protocol with various transport options
+- **VLess**: Lightweight V2Ray protocol
 - **Trojan**: TLS-based proxy protocol
 - **Hysteria2**: Modern UDP-based proxy with congestion control
 - **Tuic**: UDP-based proxy with QUIC transport
+- **Tailscale**: Embedded Tailscale node as an outbound
 - **Wireguard**: VPN protocol implementation
 - **SSH**: SSH tunnel proxy
 - **Tor**: Tor network proxy
@@ -29,6 +33,35 @@ proxies:
     port: proxy-port
     # Protocol-specific options
 ```
+
+## AnyTLS
+
+AnyTLS is a TLS-multiplexed proxy protocol that uses a shared TLS session pool for efficient connection management.
+
+```yaml
+proxies:
+  - name: "anytls"
+    type: anytls
+    server: example.com
+    port: 443
+    password: your-password
+    udp: true
+    sni: example.com
+    skip-cert-verify: false
+    alpn:
+      - h2
+      - http/1.1
+    # Optional fields (parsed for compatibility, not yet applied by runtime)
+    # fingerprint: chrome
+    # client-fingerprint: chrome
+    # idle-session-check-interval: 30
+    # idle-session-timeout: 30
+    # min-idle-session: 0
+```
+
+{% hint style="info" %}
+`fingerprint`, `client-fingerprint`, and idle-session fields are accepted for config compatibility but are not yet applied by the runtime.
+{% endhint %}
 
 ## Shadowsocks
 
@@ -275,6 +308,32 @@ proxies:
     udp-relay-mode: native
 ```
 
+## ShadowQuic
+
+ShadowQuic is a QUIC-based proxy that uses JLS obfuscation to blend in with legitimate QUIC/H3 traffic.
+
+```yaml
+proxies:
+  - name: "shadowquic"
+    type: shadowquic
+    server: example.com
+    port: 443
+    password: your-jls-password
+    username: your-jls-username
+    server-name: example.com   # must match server's jls_upstream domain
+    alpn:
+      - h3
+    # QUIC tuning (optional)
+    initial-mtu: 1300          # must be >= 1200; 1400 for high-loss networks
+    min-mtu: 1290
+    congestion-control: bbr    # bbr | new-reno | cubic
+    zero-rtt: true
+    over-stream: false         # true = QUIC stream relay, false = QUIC datagram
+    keep-alive-interval: 10000 # ms; 0 to disable
+    gso: true
+    mtu-discovery: true
+```
+
 ## Wireguard
 
 ```yaml
@@ -299,6 +358,26 @@ proxies:
     mtu: 1420
     # UDP mode
     udp: true
+```
+
+## Tailscale
+
+Tailscale embeds a Tailscale node directly inside ClashRS so you can route traffic through your Tailscale network (tsnet) without a separate Tailscale daemon.
+
+{% hint style="info" %}
+This outbound requires the binary to be built with the `tailscale` feature flag.
+{% endhint %}
+
+```yaml
+proxies:
+  - name: "tailscale"
+    type: tailscale
+    auth-key: tskey-auth-xxxx   # Tailscale auth key
+    state-dir: /var/lib/clash/tailscale  # persistent state directory
+    hostname: clash-node        # node hostname in your tailnet (optional)
+    control-url: https://controlplane.tailscale.com  # optional, defaults to Tailscale's servers
+    client-name: clash-rs       # optional client identifier
+    ephemeral: false            # if true, node is removed from tailnet on exit
 ```
 
 ## SSH
