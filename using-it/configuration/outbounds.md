@@ -337,7 +337,6 @@ proxies:
     alpn:
       - h2
       - http/1.1
-    fingerprint: chrome
 ```
 
 ## Hysteria2
@@ -378,9 +377,7 @@ proxies:
     # QUIC settings
     alpn:
       - h3
-    # Congestion control
-    cwnd: 32
-    # UDP relay mode
+    # UDP relay mode: native | quic
     udp-relay-mode: native
 ```
 
@@ -473,7 +470,8 @@ proxies:
     #   -----END OPENSSH PRIVATE KEY-----
     # private-key-passphrase: key-passphrase
     # Host key verification
-    host-key: server-host-key
+    host-key:
+      - server-host-key
     host-key-algorithms:
       - rsa-sha2-512
       - rsa-sha2-256
@@ -485,12 +483,11 @@ proxies:
 proxies:
   - name: "tor"
     type: tor
-    server: 127.0.0.1
-    port: 9050
-    # Optional authentication
-    username: your-username
-    password: your-password
 ```
+
+{% hint style="info" %}
+Tor traffic is routed through the Tor network managed internally by ClashRS. No server address or credentials are configured here — the only required field is `name`.
+{% endhint %}
 
 ## SOCKS5
 
@@ -508,6 +505,10 @@ proxies:
 ```
 
 ## HTTP
+
+{% hint style="warning" %}
+HTTP outbound proxy (`type: http`) is **not currently implemented** in ClashRS. Including it in your config will cause a parse error. Use SOCKS5 instead.
+{% endhint %}
 
 ```yaml
 proxies:
@@ -542,12 +543,13 @@ proxies:
     alpn:
       - h2
       - http/1.1
-    fingerprint: chrome
 ```
 
-### Fingerprint Options
+### Client Fingerprint (`client-fingerprint`)
 
-Available TLS fingerprints:
+The `client-fingerprint` field is supported on **VLess** and **AnyTLS** for uTLS browser impersonation. It is accepted by the parser but **not yet applied** at runtime (a warning is logged).
+
+Accepted values:
 - `chrome`
 - `firefox`
 - `safari`
@@ -555,6 +557,10 @@ Available TLS fingerprints:
 - `android`
 - `edge`
 - `random`
+
+### Certificate Fingerprint (`fingerprint`)
+
+On **Hysteria2**, `fingerprint` is a **SHA-256 hex digest** of the server certificate used for certificate pinning — not a browser profile name.
 
 ### UDP Support
 

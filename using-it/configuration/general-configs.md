@@ -106,11 +106,12 @@ log-level: debug
 ```
 
 Available options:
-- `debug`: Most verbose, shows all log messages
+- `trace`: Most verbose, shows all log messages including traces
+- `debug`: Debug-level log messages
 - `info`: Normal operation logs (default)
-- `warning`: Warning and error messages only
+- `warn` (alias: `warning`): Warning and error messages only
 - `error`: Error messages only
-- `off`: No logging
+- `off` (alias: `silent`): No logging
 
 ## External Controller
 
@@ -211,9 +212,9 @@ Control what data is cached between restarts:
 
 ```yaml
 profile:
-  store-selected: true    # Remember selected proxy in groups
-  store-fake-ip: false    # Cache fake-ip mappings
-  tracing: true          # Enable tracing support
+  store-selected: true    # Remember selected proxy in groups (default: true)
+  store-fake-ip: false    # Cache fake-ip mappings (default: false)
+  store-smart-stats: true # Persist smart proxy group statistics (default: true)
 ```
 
 ## Host Mappings
@@ -229,7 +230,7 @@ hosts:
 
 ## Advanced Listeners
 
-Configure additional listening interfaces:
+Configure additional listening interfaces. Supported listener types: `http`, `socks`, `mixed`, `tunnel`, `tproxy` (Linux only), `redir` (Linux only), `shadowsocks` (if compiled with feature support).
 
 ```yaml
 listeners:
@@ -242,6 +243,15 @@ listeners:
     type: http
     port: 8080
     listen: 127.0.0.1
+
+  - name: "tunnel-local"
+    type: tunnel
+    port: 9090
+    listen: 127.0.0.1
+    network:
+      - tcp
+      - udp
+    target: "example.com:80"
 ```
 
 ## Experimental Features
@@ -250,9 +260,7 @@ Enable experimental functionality:
 
 ```yaml
 experimental:
-  ignore-resolve-fail: true   # Continue if DNS resolution fails
-  sniff-tls-sni: true        # Sniff TLS SNI for routing
-  force-fake-ip: true        # Force fake-ip mode
+  tcp-buffer-size: 65536  # Buffer size for TCP stream bidirectional copy (bytes)
 ```
 
 ## Provider Configuration

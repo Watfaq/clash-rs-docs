@@ -44,7 +44,6 @@ proxy-providers:
       enable: true
       url: "http://www.gstatic.com/generate_204"
       interval: 300
-      timeout: 5000
       lazy: true
 ```
 
@@ -258,14 +257,8 @@ rule-providers:
     interval: 21600  # 6 hours
     path: ./rules/comprehensive.yaml
     
-    # Custom headers
-    headers:
-      Authorization: "Bearer your-token"
-      User-Agent: "ClashRS/1.0"
-      Accept: "application/yaml"
-    
-    # Format specification
-    format: yaml  # yaml or text
+    # Format specification (yaml, text, or mrs)
+    format: yaml
 ```
 
 ## Complete Example Configuration
@@ -284,7 +277,6 @@ proxy-providers:
       enable: true
       url: "http://www.gstatic.com/generate_204"
       interval: 300
-      timeout: 5000
       lazy: true
   
   subscription-2:
@@ -406,31 +398,20 @@ Force update providers using the REST API:
 ```bash
 # Update proxy provider
 curl -X PUT "http://127.0.0.1:9090/providers/proxies/subscription-1"
-
-# Update rule provider
-curl -X PUT "http://127.0.0.1:9090/providers/rules/ads-block"
-
-# Update all providers
-curl -X PUT "http://127.0.0.1:9090/providers/proxies"
-curl -X PUT "http://127.0.0.1:9090/providers/rules"
 ```
 
 ### Health Check Management
 
 ```bash
-# Check proxy health
+# Trigger health check for all proxies in a provider
 curl "http://127.0.0.1:9090/providers/proxies/subscription-1/healthcheck"
-
-# Force health check
-curl -X GET "http://127.0.0.1:9090/providers/proxies/subscription-1/healthcheck"
 ```
 
 ### Provider Status
 
 ```bash
-# Get provider status
+# Get all proxy provider status
 curl "http://127.0.0.1:9090/providers/proxies"
-curl "http://127.0.0.1:9090/providers/rules"
 ```
 
 ## Best Practices
@@ -496,11 +477,7 @@ proxy-providers:
       enable: true
       url: "http://www.gstatic.com/generate_204"
       interval: 300
-      timeout: 5000
       lazy: false
-      
-    # Retry configuration
-    expected-status: 200
 ```
 
 ## Troubleshooting
@@ -540,7 +517,6 @@ proxy-providers:
       enable: true
       url: "http://www.gstatic.com/generate_204"
       interval: 60
-      timeout: 3000
       lazy: false
 ```
 
