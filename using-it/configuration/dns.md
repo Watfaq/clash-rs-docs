@@ -235,8 +235,12 @@ Enable hosts file lookup (from the `hosts:` section of the config):
 
 ```yaml
 dns:
-  user-hosts: true  # Enable hosts file lookup
+  use-hosts: true  # Enable hosts file lookup
 ```
+
+{% hint style="warning" %}
+Note: The underlying Rust field is named `user_hosts` (a likely typo in the source), which serde serializes as `user-hosts`. However all official examples use `use-hosts`, and the default is `true`, so in practice this only matters if you want to set it to `false`.
+{% endhint %}
 
 ### DNS Resolution Strategy
 
@@ -252,7 +256,7 @@ dns:
   enable: true
   listen: 127.0.0.1:53553
   ipv6: false
-  user-hosts: true
+  use-hosts: true
   
   # DNS resolution mode
   enhanced-mode: fake-ip
