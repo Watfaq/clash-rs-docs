@@ -27,7 +27,20 @@ tproxy-port: 8900
 ```
 
 {% hint style="warning" %}
-Linux Only
+Linux Only.
+{% endhint %}
+
+{% hint style="warning" %}
+TProxy always accepts lan traffic，not affected by `allow-lan`
+{% endhint %}
+
+### **Redir Inbound**
+```yaml
+redir-port: 8901
+```
+
+{% hint style="warning" %}
+Linux Only.
 {% endhint %}
 
 ### Mixed HTTP/SOCKS5 Inbound
@@ -62,7 +75,7 @@ When `allow-lan` is enabled, `bind-address` can't be `localhost` or `127.0.0.1`
 
 ### Bind Address
 
-The listening address for the inbound listeners
+The listening address for the inbound listeners. Set to `0.0.0.0` by default
 
 ```yaml
 bind-address: '0.0.0.0'
@@ -144,7 +157,7 @@ Enable or disable IPv6 support:
 ```yaml
 ipv6: false
 ```
-
+If `bind-address` is `0.0.0.0`, this will enables dualstack listener.
 ### Outbound Interface
 
 Specify the network interface for outbound connections:
