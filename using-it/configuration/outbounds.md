@@ -194,6 +194,82 @@ proxies:
 - `chacha20-poly1305`
 - `none`: No encryption (not recommended)
 
+## VLess
+
+VLess is a lightweight, stateless protocol from the V2Ray/Xray family. It supports Reality for TLS camouflage in addition to the standard WebSocket, gRPC, and H2 transports.
+
+### Basic VLess
+
+```yaml
+proxies:
+  - name: "vless-basic"
+    type: vless
+    server: example.com
+    port: 443
+    uuid: 12345678-1234-1234-1234-123456789012
+    udp: true
+    tls: true
+    skip-cert-verify: false
+    servername: example.com
+```
+
+### VLess with WebSocket
+
+```yaml
+proxies:
+  - name: "vless-ws"
+    type: vless
+    server: example.com
+    port: 443
+    uuid: 12345678-1234-1234-1234-123456789012
+    udp: true
+    tls: true
+    servername: example.com
+    network: ws
+    ws-opts:
+      path: /ws
+      headers:
+        Host: example.com
+```
+
+### VLess with gRPC
+
+```yaml
+proxies:
+  - name: "vless-grpc"
+    type: vless
+    server: example.com
+    port: 443
+    uuid: 12345678-1234-1234-1234-123456789012
+    udp: true
+    tls: true
+    servername: example.com
+    network: grpc
+    grpc-opts:
+      grpc-service-name: GunService
+```
+
+### VLess with Reality
+
+Reality is an advanced TLS camouflage mechanism — the connection masquerades as real TLS traffic to a legitimate site.
+
+```yaml
+proxies:
+  - name: "vless-reality"
+    type: vless
+    server: example.com
+    port: 443
+    uuid: 12345678-1234-1234-1234-123456789012
+    udp: true
+    tls: true
+    servername: example.com         # SNI of the camouflage target
+    client-fingerprint: chrome      # TLS fingerprint to mimic
+    flow: xtls-rprx-vision          # optional XTLS flow
+    reality-opts:
+      public-key: your-reality-public-key
+      short-id: your-short-id
+```
+
 ## Trojan
 
 ### Basic Trojan

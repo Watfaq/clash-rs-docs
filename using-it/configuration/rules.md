@@ -116,6 +116,21 @@ rules:
   - GEOIP,KR,proxy-kr
 ```
 
+#### GEOSITE
+
+Domain category matching using the geosite database (requires `geosite` database configured):
+
+```yaml
+rules:
+  - GEOSITE,cn,DIRECT
+  - GEOSITE,google,proxy-us
+  - GEOSITE,category-ads-all,REJECT
+```
+
+{% hint style="info" %}
+GEOSITE categories are defined in the geosite database file. Common categories include `cn`, `google`, `youtube`, `netflix`, `category-ads-all`. See [v2ray-rules-dat](https://github.com/Loyalsoldier/v2ray-rules-dat) for the full list.
+{% endhint %}
+
 ### Port Rules
 
 #### DST-PORT
@@ -141,6 +156,32 @@ rules:
   - SRC-PORT,7890,DIRECT
 ```
 
+### Process Rules
+
+#### PROCESS-NAME
+
+Match traffic by the originating process name:
+
+```yaml
+rules:
+  - PROCESS-NAME,curl,DIRECT
+  - PROCESS-NAME,wget,DIRECT
+  - PROCESS-NAME,ssh,proxy-ssh
+```
+
+{% hint style="warning" %}
+PROCESS-NAME is not supported on all platforms. It works on macOS and Linux but may be unavailable in some environments.
+{% endhint %}
+
+#### PROCESS-PATH
+
+Match traffic by the full path of the originating process:
+
+```yaml
+rules:
+  - PROCESS-PATH,/usr/bin/curl,DIRECT
+  - PROCESS-PATH,/usr/local/bin/node,proxy-dev
+```
 
 ### Rule Sets
 
@@ -166,6 +207,56 @@ Network type matching:
 rules:
   - NETWORK,tcp,auto
   - NETWORK,udp,proxy-udp
+```
+
+### Composite Rules
+
+Composite rules let you combine multiple conditions using boolean logic. The syntax wraps sub-rules in parentheses.
+
+#### AND
+
+All conditions must match:
+
+```yaml
+rules:
+  # Route UDP traffic to google.com through a specific proxy
+  - AND,((DOMAIN,google.com),(NETWORK,udp)),proxy-udp
+  # Block TCP traffic to a specific IP on port 80
+  - AND,((IP-CIDR,1.2.3.4/32),(DST-PORT,80)),REJECT
+```
+
+#### OR
+
+Any condition must match:
+
+```yaml
+rules:
+  # Match either domain
+  - OR,((DOMAIN,google.com),(DOMAIN,youtube.com)),proxy-us
+  # Match TCP or UDP on port 53
+  - OR,((NETWORK,tcp),(NETWORK,udp)),DIRECT
+```
+
+#### NOT
+
+Invert the condition:
+
+```yaml
+rules:
+  # Match everything except CN traffic
+  - NOT,((GEOIP,CN)),proxy-us
+  # Match everything except direct domains
+  - NOT,((DOMAIN-SUFFIX,local)),auto
+```
+
+#### Nested Composite Rules
+
+Composite rules can be nested arbitrarily:
+
+```yaml
+rules:
+  # (domain=google.com AND network=UDP) OR (domain=youtube.com AND network=TCP)
+  - OR,((AND,((DOMAIN,google.com),(NETWORK,udp))),(AND,((DOMAIN,youtube.com),(NETWORK,tcp)))),proxy-us
 ```
 
 ### Final Rules

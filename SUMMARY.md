@@ -9,6 +9,7 @@
   * [General Configs](using-it/configuration/general-configs.md)
   * [Outbound Proxies](using-it/configuration/outbounds.md)
   * [Traffic Routing Rules](using-it/configuration/rules.md)
+  * [TUN Configuration](using-it/configuration/tun.md)
   * [Remote Content Management](using-it/configuration/remote-content.md)
   * [DNS Configuration](using-it/configuration/dns.md)
 * [👓 Config References](using-it/config-references.md)

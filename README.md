@@ -16,12 +16,12 @@ ClashRS is a network proxy software that you can use to control how you want to 
 
 ### [✨ Features](https://github.com/Watfaq/clash-rs#-features) <a href="#user-content--features" id="user-content--features"></a>
 
-* 🌈 Flexible traffic routing rules based off source/destination IP/Domain/GeoIP etc.
-* 📦 Local anti spoofing DNS with support of UDP/TCP/DoH/DoT remote.
-* 🛡 Run as a HTTP/Socks5 proxy, or utun device as a home network gateway.
-* ⚙️ Shadowsocks/Trojan/Vmess outbound support with different underlying trasports.
+* 🌈 Flexible traffic routing rules based off source/destination IP/Domain/GeoIP/GeoSite/Process etc.
+* 📦 Local anti-spoofing DNS with support of UDP/TCP/DoH/DoT remote, exposed as a local UDP/TCP/DoH/DoT server.
+* 🛡 Multiple inbound modes: HTTP, SOCKS5, Mixed, Shadowsocks, Redir, TProxy, and TUN (utun) for transparent proxying.
+* ⚙️ AnyTLS/Hysteria2/ShadowQuic/Shadowsocks/Socks5/SSH/Tailscale/Tor/Trojan/Tuic/VLess/VMess/WireGuard outbound support with transports including gRPC, TLS, H2, and WebSocket.
 * 🌍 Dynamic remote rule/proxy loader.
-* 🎵 Tracing with Jaeger
+* 🎵 Tracing with Jaeger (build with `--features telemetry`)
 
 
 
