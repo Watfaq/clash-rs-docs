@@ -238,10 +238,6 @@ dns:
   use-hosts: true  # Enable hosts file lookup
 ```
 
-{% hint style="warning" %}
-Note: The underlying Rust field is named `user_hosts` (a likely typo in the source), which serde serializes as `user-hosts`. However all official examples use `use-hosts`, and the default is `true`, so in practice this only matters if you want to set it to `false`.
-{% endhint %}
-
 ### DNS Resolution Strategy
 
 ClashRS uses a "first result" strategy:
