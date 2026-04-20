@@ -78,15 +78,27 @@ ClashRS supports all major DNS protocols with multiple server endpoints.
 
 ### Protocol-Specific Listeners
 
+The `listen` field accepts either a plain UDP address string, or a map with per-protocol settings:
+
 ```yaml
 dns:
   enable: true
-  listen: 127.0.0.1:53553    # Main DNS port
-  # Optional specific protocol ports:
-  # udp: 127.0.0.1:53553     # UDP DNS
-  # tcp: 127.0.0.1:53553     # TCP DNS
-  # dot: 127.0.0.1:53554     # DNS over TLS
-  # doh: 127.0.0.1:53555     # DNS over HTTPS
+  # Simple form — UDP only:
+  listen: 127.0.0.1:53553
+
+  # OR multi-protocol form (sub-keys under listen):
+  # listen:
+  #   udp: 127.0.0.1:53553
+  #   tcp: 127.0.0.1:53553
+  #   dot:
+  #     addr: 127.0.0.1:53554
+  #     hostname: dns.clash
+  #     ca-cert: dns.crt
+  #     ca-key: dns.key
+  #   doh:
+  #     addr: 127.0.0.1:53555
+  #     ca-cert: dns.crt
+  #     ca-key: dns.key
 ```
 
 ### Nameserver Configuration
@@ -157,6 +169,17 @@ hosts:
   'internal.company.com': 10.0.0.100
 ```
 
+### Nameserver Policy
+
+Route specific domains to dedicated nameservers:
+
+```yaml
+dns:
+  nameserver-policy:
+    'geosite:cn': '114.114.114.114'
+    '+.internal.example.com': '10.0.0.1'
+```
+
 ### Fake-IP Filtering
 
 Exclude specific domains from fake-IP resolution:
@@ -208,11 +231,11 @@ dns:
 
 ### Hosts File Integration
 
-Enable system hosts file lookup:
+Enable hosts file lookup (from the `hosts:` section of the config):
 
 ```yaml
 dns:
-  use-hosts: true  # Enable hosts file lookup
+  user-hosts: true  # Enable hosts file lookup
 ```
 
 ### DNS Resolution Strategy
@@ -229,7 +252,7 @@ dns:
   enable: true
   listen: 127.0.0.1:53553
   ipv6: false
-  use-hosts: true
+  user-hosts: true
   
   # DNS resolution mode
   enhanced-mode: fake-ip
@@ -264,6 +287,10 @@ dns:
     - '*.lan'
     - '*.local'
     - localhost.ptlogin2.qq.com
+  
+  # Route specific domains to dedicated nameservers
+  nameserver-policy:
+    'geosite:cn': '114.114.114.114'
 
 # Host overrides
 hosts:

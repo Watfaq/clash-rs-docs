@@ -7,7 +7,7 @@ ClashRS can create a virtual TUN (layer-3) network interface to transparently in
 ```yaml
 tun:
   enable: true
-  gateway: 198.18.0.1/16   # TUN interface address (CIDR)
+  gateway: 198.18.0.1/24   # TUN interface address (CIDR)
   dns-hijack: true          # redirect all DNS queries to ClashRS DNS
 ```
 
@@ -18,13 +18,14 @@ tun:
   enable: true
 
   # TUN interface device ID
-  # macOS: "utun1989"  (must start with "utun")
-  # Linux: "tun0"
+  # Accepts aliases: "device-url", "device"
+  # macOS: "utun1989" or "dev://utun1989"  (must start with "utun")
+  # Linux: "tun0" or "dev://tun0"
   # file descriptor: "fd://3"
   device-id: "utun1989"
 
   # TUN interface IPv4 address/prefix
-  gateway: 198.18.0.1/16
+  gateway: 198.18.0.1/24
 
   # TUN interface IPv6 address/prefix (optional)
   # gateway-v6: "2001:fac::1/64"
@@ -50,7 +51,7 @@ tun:
   # DNS hijack: redirect DNS queries to the ClashRS DNS server.
   # true  - hijack all UDP/TCP port 53 traffic
   # false - no hijacking (default)
-  # list  - hijack only the listed addresses
+  # list  - same effect as true (hijacks all DNS, not restricted to listed addresses)
   dns-hijack: true
   # dns-hijack:
   #   - 8.8.8.8:53
