@@ -80,6 +80,8 @@ rules:
   - IP-CIDR,10.0.0.0/8,DIRECT
   - IP-CIDR,172.16.0.0/12,DIRECT
   - IP-CIDR,127.0.0.0/8,DIRECT
+  # With no-resolve: skip DNS resolution, only match on already-known IPs
+  - IP-CIDR,8.8.8.8/32,DIRECT,no-resolve
 ```
 
 #### IP-CIDR6
@@ -91,7 +93,11 @@ rules:
   - IP-CIDR6,::1/128,DIRECT
   - IP-CIDR6,fc00::/7,DIRECT
   - IP-CIDR6,fe80::/10,DIRECT
+  # With no-resolve: skip DNS resolution
+  - IP-CIDR6,2001:db8::/32,DIRECT,no-resolve
 ```
+
+The optional `no-resolve` parameter prevents ClashRS from resolving domain names to IPs when evaluating IP-CIDR rules. Add `no-resolve` to avoid unnecessary DNS lookups for rules that only need to match on already-resolved IPs.
 
 #### SRC-IP-CIDR
 
@@ -102,6 +108,8 @@ rules:
   - SRC-IP-CIDR,192.168.1.0/24,proxy-home
   - SRC-IP-CIDR,10.0.0.0/8,DIRECT
   - SRC-IP-CIDR,172.16.0.0/12,DIRECT
+  # With no-resolve: skip DNS resolution
+  - SRC-IP-CIDR,192.168.1.0/24,proxy-home,no-resolve
 ```
 
 #### GEOIP
@@ -114,7 +122,11 @@ rules:
   - GEOIP,US,proxy-us
   - GEOIP,JP,proxy-jp
   - GEOIP,KR,proxy-kr
+  # With no-resolve: skip DNS resolution, match on original IP only
+  - GEOIP,CN,DIRECT,no-resolve
 ```
+
+The optional `no-resolve` parameter prevents ClashRS from resolving domain names to IPs when evaluating this rule. Without it, domains are resolved to check their IP against the GeoIP database.
 
 #### GEOSITE
 
@@ -170,7 +182,7 @@ rules:
 ```
 
 {% hint style="warning" %}
-PROCESS-NAME is not supported on all platforms. It works on macOS and Linux but may be unavailable in some environments.
+PROCESS-NAME is not supported on all platforms. It works on macOS, Linux, and Windows but may be unavailable in some environments.
 {% endhint %}
 
 #### PROCESS-PATH
@@ -268,15 +280,6 @@ Catch-all rule (must be last):
 ```yaml
 rules:
   - MATCH,auto
-```
-
-#### FINAL
-
-Alternative syntax for catch-all:
-
-```yaml
-rules:
-  - FINAL,DIRECT
 ```
 
 ## Rule Sets
